@@ -105,15 +105,22 @@ export function makeMath(addends: number[]): string {
 export function injectPositive(values: number[]): number[] {
     let sum = 0;
     let negative = false;
+    let result: number[] = [];
 
-    const result = values.flatMap((value) => {
+    for (let i = 0; i < values.length; i++) {
+        const value = values[i];
         if (!negative && value < 0) {
             negative = true;
-            return [value, sum];
+            result = [...result, value, sum];
+        } else {
+            sum += value;
+            result = [...result, value];
         }
-        sum += value;
-        return [value];
-    });
+    }
 
-    return negative ? result : [...result, sum];
+    if (!negative) {
+        result = [...result, sum];
+    }
+
+    return result;
 }
